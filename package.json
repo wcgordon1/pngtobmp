@@ -8,10 +8,14 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate": "node scripts/generate-content.js"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
     "astro": "^4.15.11",
-    "jszip": "^3.10.1"
+    "dotenv": "^16.4.7",
+    "jszip": "^3.10.1",
+    "openai": "^4.76.3"
   }
 }
