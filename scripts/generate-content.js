@@ -11,16 +11,41 @@ const openai = new OpenAI({
 
 // Define specific use cases for each category
 const categoryUseCases = {
-  'medical-imaging': [
-    { name: 'diagnostic-imaging', title: 'Diagnostic Imaging' },
-    { name: 'pathology-slides', title: 'Pathology Slides' },
-    { name: 'radiology-scans', title: 'Radiology Scans' }
+  'animation-graphics': [
+    { name: 'animated-sprites', title: 'Animated Sprites', displayCategory: 'Animation and Motion Graphics' },
+    { name: 'storyboards', title: 'Storyboards', displayCategory: 'Animation and Motion Graphics' },
+    { name: 'frame-by-frame', title: 'Frame-by-Frame Graphics', displayCategory: 'Animation and Motion Graphics' }
   ],
-  'retro-gaming': [
-    { name: 'sprite-sheets', title: 'Sprite Sheets' },
-    { name: 'texture-maps', title: 'Texture Maps' },
-    { name: 'game-assets', title: 'Game Assets' }
-  ]
+  'vr-design': [
+    { name: 'vr-textures', title: 'VR Textures', displayCategory: 'Virtual Reality Design' },
+    { name: 'object-overlays', title: 'Object Overlays', displayCategory: 'Virtual Reality Design' },
+    { name: 'interactive-ui', title: 'Interactive UI', displayCategory: 'Virtual Reality Design' }
+  ],
+  'drone-imaging': [
+    { name: 'aerial-photos', title: 'Aerial Photos', displayCategory: 'Drone Imaging' },
+    { name: 'mapping-overlays', title: 'Mapping Overlays', displayCategory: 'Drone Imaging' },
+    { name: 'surveying-images', title: 'Surveying Images', displayCategory: 'Drone Imaging' }
+  ],
+  'fashion-textile': [
+    { name: 'fabric-patterns', title: 'Fabric Patterns', displayCategory: 'Fashion and Textile Design' },
+    { name: 'embroidery-designs', title: 'Embroidery Designs', displayCategory: 'Fashion and Textile Design' },
+    { name: 'clothing-templates', title: 'Clothing Templates', displayCategory: 'Fashion and Textile Design' }
+  ],
+  'security-surveillance': [
+    { name: 'camera-feeds', title: 'Camera Feeds', displayCategory: 'Security and Surveillance' },
+    { name: 'facial-recognition', title: 'Facial Recognition', displayCategory: 'Security and Surveillance' },
+    { name: 'motion-detection-images', title: 'Motion Detection Images', displayCategory: 'Security and Surveillance' }
+  ],
+  'scientific-research': [
+    { name: 'microscopy-images', title: 'Microscopy Images', displayCategory: 'Scientific Research' },
+    { name: 'data-visualizations', title: 'Data Visualizations', displayCategory: 'Scientific Research' },
+    { name: 'satellite-images', title: 'Satellite Images', displayCategory: 'Scientific Research' }
+  ],
+  'automotive-design': [
+    { name: 'car-blueprints', title: 'Car Blueprints', displayCategory: 'Automotive Design' },
+    { name: 'vehicle-manuals', title: 'Vehicle Manuals', displayCategory: 'Automotive Design' },
+    { name: 'engine-diagrams', title: 'Engine Diagrams', displayCategory: 'Automotive Design' }
+  ],
 };
 
 const converterTypes = [
@@ -40,8 +65,8 @@ async function validateAndFixFrontmatter(content, category, useCase, converterTy
   const frontmatterRegex = /^---\n([\s\S]*?)\n---/;
   const match = content.match(frontmatterRegex);
   
-  const title = `${converterType.title} ${category} ${useCase.title}`;
-  const description = `Professional ${converterType.title} ${category} ${useCase.title}. Optimized for ${category} ${useCase.title.toLowerCase()} workflows.`;
+  const title = `${converterType.title} ${useCase.displayCategory} ${useCase.title}`;
+  const description = `Professional ${converterType.title} ${useCase.displayCategory} ${useCase.title}. Optimized for ${useCase.displayCategory} ${useCase.title.toLowerCase()} workflows.`;
   
   const frontmatter = `---
 title: '${title}'
@@ -58,15 +83,15 @@ ${match ? content.replace(frontmatterRegex, '') : content}`;
 
 async function generateContent(category, useCase, converterType) {
   const prompt = `
-    Create markdown content for a ${converterType.title} ${category} ${useCase.title} page.
-    This is specifically for ${useCase.title} in the ${category} field.
+    Create markdown content for a ${converterType.title} ${useCase.displayCategory} ${useCase.title} page.
+    This is specifically for ${useCase.title} in ${useCase.displayCategory} field.
 
-    Begin with a short introduction to the ${useCase.title} in ${category}. Do not include markdown for h1, only include h2 -  h3 tags. 
+    Begin with a short introduction to the ${useCase.title} in ${useCase.displayCategory}. Do not include markdown for h1, only include h2 -  h3 tags. 
     
     The content should include:
-    1. Specific features for ${useCase.title} in ${category}
+    1. Specific features for ${useCase.title} in ${useCase.displayCategory}
     2. Common use cases in ${useCase.title} workflows
-    3. Benefits for ${category} ${useCase.title} users
+    3. Benefits for ${useCase.displayCategory} ${useCase.title} users
     4. Best practices for ${useCase.title} conversion
     5. Technical considerations specific to ${useCase.title}
 
