@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('converters', ({ data }) => {
+    // Only include image-converters category
+    return data.category === 'image-converters';
+  });
+  
+  const categories = [...new Set(pages.map((page) => page.data.category))];
+  
+  return categories.map((category) => ({
+    params: { category },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.params;
+const pages = await getCollection('converters', ({ data }) => {
+  // Only show PNG to BMP and BMP to PNG pages
+  return data.category === category && 
+         (data.tags.includes('png-to-bmp') || data.tags.includes('bmp-to-png'));
+});
+
+const categoryNames = {
+  'image-converters': 'Image Converters',
+};
+
+const title = `${categoryNames[category]} - Online File Conversion Tools`;
+const description = `Free online ${categoryNames[category].toLowerCase()} for PNG to BMP and BMP to PNG conversion. Convert your files easily and securely in your browser.`;
+---
+
+<Layout title={title}>
+  <BaseHead title={title} description={description} />
+  <main>
+    <Breadcrumbs
+      paths={[
+        { name: categoryNames[category], url: `/${category}/home` }
+      ]}
+    />
+    
+    <h1><span class="text-gradient">{categoryNames[category]}</span></h1>
+    
+    <div class="page-grid">
+      {pages.map((page) => (
+        <a href={`/${category}/${page.slug}`} class="page-card">
+          <h2>{page.data.title}</h2>
+          <p>{page.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin-bottom: 1em;
+  }
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0;
+  }
+  .page-card {
+    background: #2a2a2a;
+    padding: 1.5rem;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    transition: transform 0.2s;
+  }
+  .page-card:hover {
+    transform: translateY(-2px);
+  }
+  .page-card h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .page-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+</style>

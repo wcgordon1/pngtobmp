@@ -1,0 +1,147 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import BaseHead from '../components/BaseHead.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const pages = await getCollection('converters');
+
+// Group pages by category
+const pagesByCategory = pages.reduce((acc, page) => {
+  const category = page.data.category;
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(page);
+  return acc;
+}, {});
+
+const categoryNames = {
+  'image-converters': 'Image Converters',
+  'documentation': 'Documentation',
+  'embedded-systems': 'Embedded Systems',
+  'printing': 'Printing',
+  'retro-gaming': 'Retro Gaming',
+  'medical-imaging': 'Medical Imaging',
+  'cad-software': 'CAD Software'
+};
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' }
+];
+
+// Sort the categories alphabetically by their display names
+const sortedCategories = Object.entries(pagesByCategory).sort(([a], [b]) => {
+  const nameA = categoryNames[a] || a;
+  const nameB = categoryNames[b] || b;
+  return nameA.localeCompare(nameB);
+});
+---
+
+<Layout title="All Converters">
+  <BaseHead 
+    title="All Image Format Converters"
+    description="Browse all available image format converters organized by category"
+  />
+  <main>
+    <Breadcrumbs paths={breadcrumbs.slice(1)} />
+    
+    <article class="content">
+      <h1>All Converters</h1>
+      
+      {sortedCategories.map(([category, categoryPages]) => (
+        <div class="category-section">
+          <h2>{categoryNames[category] || category}</h2>
+          <div class="category-grid">
+            {categoryPages.map(page => (
+              <a href={`/${category}/${page.slug}`} class="converter-card">
+                <h3>{page.data.title}</h3>
+                <p>{page.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </article>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 1200px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  
+  .content {
+    margin-top: 2rem;
+  }
+  
+  h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin-bottom: 2em;
+    color: white;
+  }
+  
+  .category-section {
+    margin-bottom: 4rem;
+  }
+  
+  .category-section h2 {
+    font-size: 2rem;
+    color: rgb(var(--accent-light));
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(var(--accent-light), 0.2);
+  }
+  
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .converter-card {
+    background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
+    border: 1px solid rgba(var(--accent-light), 25%);
+    border-radius: 8px;
+    padding: 1.5rem;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .converter-card:hover {
+    transform: translateY(-2px);
+    border-color: rgb(var(--accent-light));
+  }
+  
+  .converter-card h3 {
+    color: rgb(var(--accent-light));
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+  }
+  
+  .converter-card p {
+    margin: 0;
+    opacity: 0.8;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 768px) {
+    .category-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    h1 {
+      font-size: 3rem;
+    }
+  }
+</style> 

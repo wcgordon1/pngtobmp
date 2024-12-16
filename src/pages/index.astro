@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PngToBmpConverter from '../components/PngToBmpConverter.astro';
+import BmpToPngConverter from '../components/BmpToPngConverter.astro';
+---
+
+<Layout title="Image Format Converter">
+  <main>
+    <h1>png to bmp <span class="text-gradient">Converter</span></h1>
+    <p class="instructions">
+      Upload your images and convert them between PNG and BMP formats.<br />
+      <strong>Multiple files?</strong> They'll be downloaded as a ZIP archive!
+    </p>
+    
+    <div class="converters-grid">
+      <PngToBmpConverter />
+      <BmpToPngConverter />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin-bottom: 1em;
+  }
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+  .instructions {
+    margin-bottom: 2rem;
+    border: 1px solid rgba(var(--accent-light), 25%);
+    background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .instructions strong {
+    color: rgb(var(--accent-light));
+  }
+  .converters-grid {
+    display: grid;
+    gap: 2rem;
+    padding: 0;
+  }
+</style>

@@ -1,0 +1,207 @@
+---
+---
+<div class="converter-container">
+  <h2>BMP to PNG Converter</h2>
+  <div class="upload-zone">
+    <input 
+      type="file" 
+      id="bmpInput" 
+      accept=".bmp" 
+      multiple 
+      class="file-input"
+    />
+    <div class="upload-content">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p class="upload-text">Click to upload or drag and drop file(s) here</p>
+      <p class="upload-hint">Supports multiple BMP files</p>
+    </div>
+  </div>
+  <div id="bmpPreview" class="preview-container"></div>
+  <button id="bmpDownloadBtn" style="display: none;" class="download-btn">
+    Download Converted Files
+  </button>
+</div>
+
+<script>
+  import JSZip from 'jszip';
+
+  const input = document.getElementById('bmpInput');
+  const preview = document.getElementById('bmpPreview');
+  const downloadBtn = document.getElementById('bmpDownloadBtn');
+  let convertedFiles = [];
+
+  function convertBmpToPng(bmpData) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        
+        // Convert to PNG
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, 'image/png');
+      };
+      img.src = bmpData;
+    });
+  }
+
+  input?.addEventListener('change', async (e) => {
+    convertedFiles = [];
+    preview.innerHTML = '';
+    const files = e.target.files;
+
+    if (files.length > 0) {
+      for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const pngBlob = await convertBmpToPng(e.target.result);
+          convertedFiles.push({
+            name: file.name.replace('.bmp', '.png'),
+            blob: pngBlob
+          });
+
+          // Show preview
+          const previewItem = document.createElement('div');
+          previewItem.className = 'preview-item';
+          previewItem.innerHTML = `
+            <p>${file.name} → ${file.name.replace('.bmp', '.png')}</p>
+          `;
+          preview.appendChild(previewItem);
+
+          if (convertedFiles.length === files.length) {
+            downloadBtn.style.display = 'block';
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  });
+
+  downloadBtn?.addEventListener('click', async () => {
+    if (convertedFiles.length > 0) {
+      const zip = new JSZip();
+      
+      convertedFiles.forEach((file) => {
+        zip.file(file.name, file.blob);
+      });
+
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const downloadUrl = URL.createObjectURL(zipBlob);
+      const downloadLink = document.createElement('a');
+      downloadLink.href = downloadUrl;
+      downloadLink.download = 'converted_images.zip';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(downloadUrl);
+    }
+  });
+</script>
+
+<style>
+  .converter-container {
+    background: #2a2a2a;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .file-input {
+    background: #3a3a3a;
+    padding: 1rem;
+    border-radius: 4px;
+    border: 2px dashed #666;
+    width: 100%;
+    margin: 1rem 0;
+  }
+
+  .preview-container {
+    margin: 1rem 0;
+  }
+
+  .preview-item {
+    background: #3a3a3a;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+  }
+
+  .download-btn {
+    background: rgb(var(--accent));
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+  }
+
+  .download-btn:hover {
+    background: rgb(var(--accent-dark));
+  }
+
+  .upload-zone {
+    position: relative;
+    background: #3a3a3a;
+    border: 2px dashed #666;
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    transition: all 0.3s ease;
+  }
+
+  .upload-zone:hover {
+    border-color: rgb(var(--accent));
+    background: #404040;
+  }
+
+  .file-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    pointer-events: none;
+  }
+
+  .upload-content svg {
+    color: #666;
+    width: 48px;
+    height: 48px;
+    transition: color 0.3s ease;
+  }
+
+  .upload-zone:hover .upload-content svg {
+    color: rgb(var(--accent));
+  }
+
+  .upload-text {
+    font-size: 1.1rem;
+    color: #fff;
+    margin: 0;
+  }
+
+  .upload-hint {
+    font-size: 0.9rem;
+    color: #888;
+    margin: 0;
+  }
+</style>

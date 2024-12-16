@@ -1,0 +1,166 @@
+---
+import { getCollection } from 'astro:content';
+
+const pages = await getCollection('converters');
+
+// Group pages by category
+const pagesByCategory = pages.reduce((acc, page) => {
+  const category = page.data.category;
+  if (!acc[category]) {
+    acc[category] = [];
+  }
+  acc[category].push(page);
+  return acc;
+}, {});
+
+// Convert category names to display names
+const categoryNames = {
+  'image-converters': 'Image Converters',
+  'documentation': 'Documentation',
+  'embedded-systems': 'Embedded Systems',
+  'printing': 'Printing',
+  'retro-gaming': 'Retro Gaming',
+  'medical-imaging': 'Medical Imaging',
+  'cad-software': 'CAD Software'
+};
+---
+
+<footer class="site-footer">
+  <div class="footer-main">
+    <div class="primary-links">
+      <h3>PNG TO BMP</h3>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/all-image-converters">All Image Converters</a></li>
+        <li><a href="/image-converters/bmp-to-png">BMP to PNG</a></li>
+        <li><a href="/image-converters/png-to-bmp">PNG to BMP</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="footer-divider" />
+
+  <div class="footer-categories">
+    {Object.entries(pagesByCategory).map(([category, categoryPages]) => (
+      <div class="category-section">
+        <h4>{categoryNames[category] || category}</h4>
+        <ul>
+          {categoryPages.map(page => (
+            <li>
+              <a href={`/${page.data.category}/${page.slug}`}>{page.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+  
+  <div class="footer-bottom">
+    <p>&copy; {new Date().getFullYear()} Image Format Converter. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: #1a1a1a;
+    color: #fff;
+    padding: 4rem 2rem 2rem;
+    margin-top: 4rem;
+  }
+
+  .footer-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+  }
+
+  .primary-links h3 {
+    color: rgb(var(--accent-light));
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .primary-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .primary-links li {
+    margin: 0.75rem 0;
+  }
+
+  .primary-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s;
+  }
+
+  .primary-links a:hover {
+    color: rgb(var(--accent-light));
+  }
+
+  .footer-divider {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 2rem 0;
+  }
+
+  .footer-categories {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .category-section h4 {
+    color: #888;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .category-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .category-section li {
+    margin: 0.5rem 0;
+  }
+
+  .category-section a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s;
+  }
+
+  .category-section a:hover {
+    color: rgb(var(--accent-light));
+  }
+
+  .footer-bottom {
+    border-top: 1px solid #333;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #888;
+  }
+
+  @media (max-width: 768px) {
+    .footer-categories {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-categories {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

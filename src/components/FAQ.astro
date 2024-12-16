@@ -1,0 +1,64 @@
+---
+interface Props {
+  faqs: {
+    question: string;
+    answer: string;
+  }[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<section class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-list">
+    {faqs.map(({ question, answer }) => (
+      <details class="faq-item">
+        <summary>{question}</summary>
+        <p>{answer}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .faq-section {
+    margin-top: 4rem;
+    padding: 2rem;
+    background: #2a2a2a;
+    border-radius: 8px;
+  }
+
+  .faq-section h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: #333;
+    border-radius: 4px;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.5rem;
+  }
+
+  .faq-item summary:hover {
+    color: rgb(var(--accent-light));
+  }
+
+  .faq-item p {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    color: #ccc;
+  }
+</style>

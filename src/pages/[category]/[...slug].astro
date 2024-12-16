@@ -1,0 +1,163 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import FAQ from '../../components/FAQ.astro';
+import PngToBmpConverter from '../../components/PngToBmpConverter.astro';
+import BmpToPngConverter from '../../components/BmpToPngConverter.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('converters');
+  
+  return pages.map((page) => ({
+    params: { 
+      category: page.data.category,
+      slug: page.slug,
+    },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+const { Content } = await page.render();
+
+const categoryNames = {
+  'image-converters': 'Image Converters',
+  'documentation': 'Documentation',
+  'embedded-systems': 'Embedded Systems',
+  'printing': 'Printing',
+  'retro-gaming': 'Retro Gaming',
+  'medical-imaging': 'Medical Imaging',
+  'cad-software': 'CAD Software'
+};
+
+// Determine which converter to show based on the tags only
+const getConverterComponent = (tags) => {
+  if (tags.includes('png-to-bmp')) {
+    return PngToBmpConverter;
+  }
+  if (tags.includes('bmp-to-png')) {
+    return BmpToPngConverter;
+  }
+  return null;
+};
+
+const ConverterComponent = getConverterComponent(page.data.tags);
+
+// Common FAQs for each converter type
+const commonFaqs = {
+  'png-to-bmp': [
+    {
+      question: "How do I convert PNG to BMP?",
+      answer: "Simply click 'Choose Files' to select your PNG files, then click 'Convert' to transform them to BMP format. You can convert multiple files at once."
+    },
+    {
+      question: "Will I lose quality when converting PNG to BMP?",
+      answer: "No, the conversion from PNG to BMP is lossless. BMP files store uncompressed image data, preserving the original quality."
+    },
+    {
+      question: "Can I convert multiple PNG files at once?",
+      answer: "Yes, you can select multiple PNG files for batch conversion. All converted files will be downloaded in a single ZIP archive."
+    },
+    {
+      question: "Is there a file size limit?",
+      answer: "There is no strict file size limit as all processing is done locally in your browser. However, very large files may take longer to process."
+    }
+  ],
+  'bmp-to-png': [
+    {
+      question: "How do I convert BMP to PNG?",
+      answer: "Click 'Choose Files' to select your BMP files, then click 'Convert' to transform them to PNG format. Multiple files can be converted simultaneously."
+    },
+    {
+      question: "Does PNG compression affect image quality?",
+      answer: "No, PNG uses lossless compression, meaning no image quality is lost during conversion from BMP."
+    },
+    {
+      question: "Can I convert multiple BMP files at once?",
+      answer: "Yes, you can select multiple BMP files for batch conversion. All converted files will be downloaded in a single ZIP archive."
+    },
+    {
+      question: "Why should I convert BMP to PNG?",
+      answer: "PNG files are smaller than BMP files while maintaining the same quality. They also support transparency and are more widely supported on the web."
+    }
+  ]
+};
+
+const getFaqs = (tags) => {
+  if (tags.includes('png-to-bmp')) return commonFaqs['png-to-bmp'];
+  if (tags.includes('bmp-to-png')) return commonFaqs['bmp-to-png'];
+  return [];
+};
+
+const faqs = getFaqs(page.data.tags);
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: categoryNames[page.data.category], url: `/${page.data.category}` },
+  { name: page.data.title, url: `/${page.data.category}/${page.slug}` }
+];
+---
+
+<Layout title={page.data.title}>
+  <BaseHead 
+    title={page.data.title} 
+    description={page.data.description}
+    breadcrumbs={breadcrumbs}
+    faqs={faqs}
+  />
+  <main>
+    <Breadcrumbs paths={breadcrumbs.slice(1)} />
+    
+    <article class="content">
+      <h1>{page.data.title}</h1>
+      {ConverterComponent && <ConverterComponent />}
+      <div class="markdown-content">
+        <Content />
+      </div>
+      {faqs.length > 0 && <FAQ faqs={faqs} />}
+    </article>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  .content {
+    margin-top: 2rem;
+  }
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 1em;
+  }
+  .markdown-content {
+    margin-top: 2rem;
+  }
+  .markdown-content :global(h1) {
+    display: none; /* Hide the h1 from markdown content since we're using frontmatter title */
+  }
+  .markdown-content :global(h2) {
+    font-size: 1.8rem;
+    margin: 2rem 0 1rem;
+  }
+  .markdown-content :global(p) {
+    margin-bottom: 1rem;
+  }
+  .markdown-content :global(ul) {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+  .markdown-content :global(li) {
+    margin: 0.5rem 0;
+  }
+</style>
