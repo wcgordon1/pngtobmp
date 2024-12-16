@@ -9,12 +9,19 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-const categories = [
-  'embedded-systems',
-  'printing',
-  'retro-gaming',
-  'medical-imaging'
-];
+// Define specific use cases for each category
+const categoryUseCases = {
+  'medical-imaging': [
+    { name: 'diagnostic-imaging', title: 'Diagnostic Imaging' },
+    { name: 'pathology-slides', title: 'Pathology Slides' },
+    { name: 'radiology-scans', title: 'Radiology Scans' }
+  ],
+  'retro-gaming': [
+    { name: 'sprite-sheets', title: 'Sprite Sheets' },
+    { name: 'texture-maps', title: 'Texture Maps' },
+    { name: 'game-assets', title: 'Game Assets' }
+  ]
+};
 
 const converterTypes = [
   {
@@ -29,62 +36,41 @@ const converterTypes = [
   }
 ];
 
-async function getExistingFiles() {
-  try {
-    const files = await fs.readdir('src/content/converters');
-    return files;
-  } catch {
-    return [];
-  }
-}
-
-async function validateAndFixFrontmatter(content, category, converterType) {
+async function validateAndFixFrontmatter(content, category, useCase, converterType) {
   const frontmatterRegex = /^---\n([\s\S]*?)\n---/;
   const match = content.match(frontmatterRegex);
   
-  if (!match) {
-    return `---
-title: '${converterType.title} ${category}'
-description: 'Professional ${converterType.title} ${category}. Optimized for ${category} specific needs.'
+  const title = `${converterType.title} ${category} ${useCase.title}`;
+  const description = `Professional ${converterType.title} ${category} ${useCase.title}. Optimized for ${category} ${useCase.title.toLowerCase()} workflows.`;
+  
+  const frontmatter = `---
+title: '${title}'
+description: '${description}'
 category: '${category}'
 pubDate: ${new Date().toISOString().split('T')[0]}
-tags: ['${converterType.tag}', '${category}', 'conversion']
+tags: ['${converterType.tag}', '${category}', '${useCase.name}', 'conversion']
 ---
 
-${content}`;
-  }
+${match ? content.replace(frontmatterRegex, '') : content}`;
 
-  const updatedFrontmatter = {
-    title: `${converterType.title} ${category}`,
-    description: `Professional ${converterType.title} ${category}. Optimized for ${category} specific needs.`,
-    category: category,
-    pubDate: new Date().toISOString().split('T')[0],
-    tags: [converterType.tag, category, 'conversion']
-  };
-
-  return `---
-title: '${updatedFrontmatter.title}'
-description: '${updatedFrontmatter.description}'
-category: '${updatedFrontmatter.category}'
-pubDate: ${updatedFrontmatter.pubDate}
-tags: ${JSON.stringify(updatedFrontmatter.tags)}
----
-
-${content.replace(frontmatterRegex, '')}`;
+  return frontmatter;
 }
 
-async function generateContent(category, converterType) {
+async function generateContent(category, useCase, converterType) {
   const prompt = `
-    Create markdown content for a ${converterType.title} ${category} page.
-    The content should include:
-    1. A descriptive title specific to ${category}
-    2. A detailed description for meta tags
-    3. Relevant features for this specific use case
-    4. Common use cases in the ${category} field
-    5. Benefits specific to ${category} users
-    6. Best practices for ${category} conversion
+    Create markdown content for a ${converterType.title} ${category} ${useCase.title} page.
+    This is specifically for ${useCase.title} in the ${category} field.
 
-    The content should be professional and focused on the specific needs of ${category} users.
+    Begin with a short introduction to the ${useCase.title} in ${category}. Do not include markdown for h1, only include h2 -  h3 tags. 
+    
+    The content should include:
+    1. Specific features for ${useCase.title} in ${category}
+    2. Common use cases in ${useCase.title} workflows
+    3. Benefits for ${category} ${useCase.title} users
+    4. Best practices for ${useCase.title} conversion
+    5. Technical considerations specific to ${useCase.title}
+
+    Make the content unique and focused on this specific use case.
     Do not include frontmatter - it will be added automatically.
   `;
 
@@ -93,7 +79,7 @@ async function generateContent(category, converterType) {
     messages: [
       {
         role: "system",
-        content: "You are a technical writer creating content for image conversion software."
+        content: "You are a technical writer creating content for specialized image conversion software."
       },
       {
         role: "user",
@@ -104,32 +90,16 @@ async function generateContent(category, converterType) {
   });
 
   const content = completion.choices[0].message.content;
-  return validateAndFixFrontmatter(content, category, converterType);
-}
-
-async function getNextFileNumber(converterType) {
-  const existingFiles = await getExistingFiles();
-  const pattern = new RegExp(`^${converterType.type}-.*-(\\d+)\\.md$`);
-  
-  const numbers = existingFiles
-    .map(file => {
-      const match = file.match(pattern);
-      return match ? parseInt(match[1]) : 0;
-    })
-    .filter(num => !isNaN(num));
-
-  return numbers.length > 0 ? Math.max(...numbers) + 1 : 1;
+  return validateAndFixFrontmatter(content, category, useCase, converterType);
 }
 
 async function main() {
-  // Ensure the converters directory exists
   await fs.mkdir('src/content/converters', { recursive: true });
 
-  for (const category of categories) {
-    for (const converterType of converterTypes) {
-      for (let i = 1; i <= 3; i++) {
-        const nextNumber = await getNextFileNumber(converterType);
-        const filename = `${converterType.type}-${category}-${nextNumber}.md`;
+  for (const [category, useCases] of Object.entries(categoryUseCases)) {
+    for (const useCase of useCases) {
+      for (const converterType of converterTypes) {
+        const filename = `${converterType.type}-${category}-${useCase.name}.md`;
         const filePath = path.join('src/content/converters', filename);
 
         try {
@@ -137,7 +107,7 @@ async function main() {
           console.log(`Skipping existing file: ${filePath}`);
           continue;
         } catch {
-          const content = await generateContent(category, converterType);
+          const content = await generateContent(category, useCase, converterType);
           await fs.writeFile(filePath, content, 'utf-8');
           console.log(`Generated: ${filePath}`);
         }
