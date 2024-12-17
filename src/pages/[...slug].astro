@@ -14,11 +14,14 @@ export async function getStaticPaths() {
     params: {
       slug: `${page.data.category}/${page.slug}`
     },
-    props: { page }
+    props: { 
+      page,
+      description: page.data.description?.slice(0, 160) + (page.data.description?.length > 160 ? '...' : '')
+    }
   }));
 }
 
-const { page } = Astro.props;
+const { page, description } = Astro.props;
 const { Content } = await page.render();
 
 console.log('\n[...slug].astro - Page Data:', {
@@ -107,10 +110,10 @@ const getFaqs = (tags) => {
 const faqs = getFaqs(page.data.tags);
 ---
 
-<Layout title={page.data.title}>
+<Layout title={page.data.title} description={description}>
   <BaseHead 
     title={page.data.title} 
-    description={page.data.description}
+    description={description}
     breadcrumbs={breadcrumbs}
     faqs={faqs}
   />

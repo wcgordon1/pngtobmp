@@ -4,20 +4,48 @@ import Footer from '../components/Footer.astro';
 
 interface Props {
 	title: string;
+	description?: string;
 }
 
-const { title } = Astro.props;
+// Helper functions to trim meta content
+function trimDescription(text: string) {
+	return text.length > 160 ? text.slice(0, 157) + '...' : text;
+}
+
+function trimTitle(text: string) {
+	return text.length > 60 ? text.slice(0, 57) + '...' : text;
+}
+
+const { 
+	title,
+	description = "Convert between PNG and BMP formats with our free online tools. Our free online converter makes it easy to switch between PNG and BMP formats."
+} = Astro.props;
+
+const trimmedTitle = trimTitle(title);
+const trimmedDescription = trimDescription(description);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+		<title>{trimmedTitle}</title>
+
+		<!-- Primary Meta Tags -->
+		<meta name="description" content={trimmedDescription} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={trimmedTitle} />
+		<meta property="og:description" content={trimmedDescription} />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:title" content={trimmedTitle} />
+		<meta property="twitter:description" content={trimmedDescription} />
 	</head>
 	<body>
 		<Header />
