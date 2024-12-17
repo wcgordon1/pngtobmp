@@ -1,0 +1,139 @@
+---
+const faqs = [
+  {
+    question: "What is the PNG to BMP converter?",
+    answer: "Our PNG to BMP converter is a free online tool that converts PNG (Portable Network Graphics) files to BMP (Bitmap) format while maintaining image quality. It's designed for compatibility with legacy systems and software."
+  },
+  {
+    question: "Why would I need to convert PNG to BMP?",
+    answer: "BMP files are often required for legacy software, CAD programs, embedded systems, and older operating systems that don't support PNG. BMP format provides raw, uncompressed image data which some applications specifically require."
+  },
+  {
+    question: "Is there a file size limit for conversion?",
+    answer: "Our converter supports files up to 50MB each. You can convert multiple files simultaneously, and they'll be delivered in a convenient ZIP archive."
+  },
+  {
+    question: "Do I need to create an account to use the converter?",
+    answer: "No, our converter is completely free to use and doesn't require any registration or account creation. Simply upload your files and convert them instantly."
+  },
+  {
+    question: "Are my files kept private and secure?",
+    answer: "Yes, all conversions happen directly in your browser. Your files are never uploaded to our servers, ensuring complete privacy and security of your data."
+  },
+  {
+    question: "What's the difference between PNG and BMP formats?",
+    answer: "PNG is a compressed image format that supports transparency and is ideal for web use. BMP is an uncompressed format that stores raw image data, making it larger but perfect for compatibility and editing."
+  },
+  {
+    question: "Can I convert multiple files at once?",
+    answer: "Yes, our converter supports batch conversion. You can upload multiple PNG files simultaneously and convert them all to BMP format in one go."
+  },
+  {
+    question: "Will I lose image quality during conversion?",
+    answer: "No, our converter maintains the original image quality. BMP is a lossless format, so no image data is lost during the conversion process."
+  },
+  {
+    question: "Which operating systems support BMP files?",
+    answer: "BMP files are supported by virtually all operating systems, including Windows, macOS, Linux, and most embedded systems. It's one of the most widely compatible image formats."
+  },
+  {
+    question: "How do I download my converted files?",
+    answer: "After conversion, click the 'Download Converted Files' button. Multiple files will be downloaded as a ZIP archive, while single files will download directly in BMP format."
+  },
+  {
+    question: "What's the technical structure of a PNG file?",
+    answer: "PNG files use lossless data compression and support up to 16.7 million colors (24-bit RGB). They feature an alpha channel for transparency and are organized in chunks, with the IHDR chunk containing basic image information like dimensions and color depth. This makes PNG ideal for images requiring both high quality and transparency."
+  },
+  {
+    question: "How does BMP store image data?",
+    answer: "BMP files store image data in a simple grid format, with each pixel represented by a specific number of bits (1, 4, 8, 16, 24, or 32-bit color depth). The file starts with a header containing image dimensions and color information, followed by an optional color palette and the raw pixel data, typically stored from bottom-to-top and left-to-right."
+  },
+  {
+    question: "What are the ideal use cases for PNG vs BMP?",
+    answer: "PNG is best for web graphics, logos, and images requiring transparency or small file sizes while maintaining quality. BMP is preferred for specialized software applications, hardware devices, and situations requiring unprocessed pixel data, such as medical imaging or scientific analysis where data integrity is crucial."
+  }
+];
+---
+
+<section class="faq-section">
+  <h2>FAQ about PNG to BMP</h2>
+  
+  <div class="faq-grid">
+    {faqs.map(faq => (
+      <div class="faq-item">
+        <h3>{faq.question}</h3>
+        <p>{faq.answer}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- FAQ Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+})} />
+
+<style>
+  .faq-section {
+    margin: 4rem 0;
+    padding: 2rem;
+    background: rgba(var(--accent-dark), 0.2);
+    border-radius: 8px;
+  }
+
+  h2 {
+    color: rgb(var(--accent-light));
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .faq-grid {
+    display: grid;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    background: rgba(var(--accent-dark), 0.3);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(var(--accent-light), 0.1);
+  }
+
+  h3 {
+    color: rgb(var(--accent-light));
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: white;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .faq-section {
+      padding: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    .faq-item {
+      padding: 1rem;
+    }
+  }
+</style> 

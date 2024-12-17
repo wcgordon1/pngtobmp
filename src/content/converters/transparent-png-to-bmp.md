@@ -3,7 +3,7 @@ title: 'Convert Transparent PNG to BMP'
 description: 'Free online tool to convert transparent PNG images to BMP format with background color options. Handle transparency professionally.'
 category: 'image-converters'
 pubDate: 2024-01-01
-tags: ['png', 'bmp', 'transparency', 'background color']
+tags: ['png-to-bmp', 'png', 'transparency', 'background color']
 ---
 
 # Transparent PNG to BMP Converter

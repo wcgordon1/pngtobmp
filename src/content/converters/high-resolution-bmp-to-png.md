@@ -3,7 +3,7 @@ title: 'Convert High Resolution BMP to PNG'
 description: 'Free online tool to convert high resolution BMP images to compressed PNG format without quality loss. Perfect for large images.'
 category: 'image-converters'
 pubDate: 2024-01-01
-tags: ['bmp', 'png', 'high resolution', 'lossless compression']
+tags: ['bmp-to-png', 'png', 'high resolution', 'lossless compression']
 ---
 
 # High Resolution BMP to PNG Converter

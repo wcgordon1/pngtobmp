@@ -3,7 +3,7 @@ title: 'Bulk Convert BMP to PNG Online'
 description: 'Free online tool to convert multiple BMP images to PNG format in bulk. Perfect for converting large collections of images efficiently.'
 category: 'image-converters'
 pubDate: 2024-01-01
-tags: ['bmp', 'png', 'bulk conversion', 'batch processing']
+tags: ['bmp-to-png', 'png', 'bulk conversion', 'batch processing']
 ---
 
 # Bulk BMP to PNG Converter

@@ -81,7 +81,19 @@ const commonFaqs = {
     {
       question: "Why should I convert BMP to PNG?",
       answer: "PNG files are smaller than BMP files while maintaining the same quality. They also support transparency and are more widely supported on the web."
-    }
+    },
+    {
+    question: "What's the technical structure of a PNG file?",
+    answer: "PNG files use lossless data compression and support up to 16.7 million colors (24-bit RGB). They feature an alpha channel for transparency and are organized in chunks, with the IHDR chunk containing basic image information like dimensions and color depth. This makes PNG ideal for images requiring both high quality and transparency."
+  },
+  {
+    question: "How does BMP store image data?",
+    answer: "BMP files store image data in a simple grid format, with each pixel represented by a specific number of bits (1, 4, 8, 16, 24, or 32-bit color depth). The file starts with a header containing image dimensions and color information, followed by an optional color palette and the raw pixel data, typically stored from bottom-to-top and left-to-right."
+  },
+  {
+    question: "What are the ideal use cases for PNG vs BMP?",
+    answer: "PNG is best for web graphics, logos, and images requiring transparency or small file sizes while maintaining quality. BMP is preferred for specialized software applications, hardware devices, and situations requiring unprocessed pixel data, such as medical imaging or scientific analysis where data integrity is crucial."
+  }
   ]
 };
 
