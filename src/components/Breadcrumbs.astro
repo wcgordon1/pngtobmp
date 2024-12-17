@@ -7,6 +7,22 @@ interface Props {
 }
 
 const { paths } = Astro.props;
+
+function formatPathName(path: { name: string; url: string }) {
+  // For category links (middle breadcrumb), use the URL path
+  if (path.url.split('/').length === 2) {
+    // Get category from URL: '/education-training' -> 'education-training'
+    const category = path.url.slice(1);
+    // Format it: 'education-training' -> 'Education Training'
+    return category
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+  
+  // For the page title (last breadcrumb), use the name as is
+  return path.name;
+}
 ---
 
 <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -17,17 +33,15 @@ const { paths } = Astro.props;
     <li>
       <a href="/all-image-converters">All Converters</a>
     </li>
-    {
-      paths.map((path, index) => (
-        <li>
-          {index === paths.length - 1 ? (
-            <span aria-current="page">{path.name}</span>
-          ) : (
-            <a href={path.url}>{path.name}</a>
-          )}
-        </li>
-      ))
-    }
+    {paths.map((path, index) => (
+      <li>
+        {index === paths.length - 1 ? (
+          <span aria-current="page">{path.name}</span>
+        ) : (
+          <a href={path.url}>{formatPathName(path)}</a>
+        )}
+      </li>
+    ))}
   </ol>
 </nav>
 

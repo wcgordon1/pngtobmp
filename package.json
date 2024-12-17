@@ -9,12 +9,14 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate": "node scripts/generate-content.js"
+    "generate": "node scripts/generate-content.js",
+    "check-categories": "node scripts/check-categories.js"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.2.1",
     "astro": "^4.15.11",
     "dotenv": "^16.4.7",
+    "gray-matter": "^4.0.3",
     "jszip": "^3.10.1",
     "openai": "^4.76.3"
   }

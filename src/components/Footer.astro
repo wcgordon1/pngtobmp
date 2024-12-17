@@ -13,16 +13,16 @@ const pagesByCategory = pages.reduce((acc, page) => {
   return acc;
 }, {});
 
-// Convert category names to display names
-const categoryNames = {
-  'image-converters': 'Image Converters',
-  'documentation': 'Documentation',
-  'embedded-systems': 'Embedded Systems',
-  'printing': 'Printing',
-  'retro-gaming': 'Retro Gaming',
-  'medical-imaging': 'Medical Imaging',
-  'cad-software': 'CAD Software'
-};
+function formatCategoryName(category: string) {
+  return category
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+// Sort categories alphabetically by their formatted names
+const sortedCategories = Object.entries(pagesByCategory)
+  .sort(([a], [b]) => formatCategoryName(a).localeCompare(formatCategoryName(b)));
 ---
 
 <footer class="site-footer">
@@ -32,8 +32,6 @@ const categoryNames = {
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/all-image-converters">All Image Converters</a></li>
-        <li><a href="/image-converters/bmp-to-png">BMP to PNG</a></li>
-        <li><a href="/image-converters/png-to-bmp">PNG to BMP</a></li>
       </ul>
     </div>
   </div>
@@ -41,9 +39,9 @@ const categoryNames = {
   <hr class="footer-divider" />
 
   <div class="footer-categories">
-    {Object.entries(pagesByCategory).map(([category, categoryPages]) => (
+    {sortedCategories.map(([category, categoryPages]) => (
       <div class="category-section">
-        <h4>{categoryNames[category] || category}</h4>
+        <h4>{formatCategoryName(category)}</h4>
         <ul>
           {categoryPages.map(page => (
             <li>

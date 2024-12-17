@@ -6,6 +6,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('converters');
+  // Get unique categories from all pages
   const categories = [...new Set(pages.map(page => page.data.category))];
   
   return categories.map(category => ({
@@ -19,6 +20,12 @@ export async function getStaticPaths() {
 
 const { pages, category } = Astro.props;
 
+console.log('\n[category]/index.astro - Category Page Data:', {
+  category,
+  pageCount: pages.length,
+  pageCategories: pages.map(p => p.data.category)
+});
+
 const categoryNames = {
   'image-converters': 'Image Converters',
   'documentation': 'Documentation',
@@ -26,30 +33,50 @@ const categoryNames = {
   'printing': 'Printing',
   'retro-gaming': 'Retro Gaming',
   'medical-imaging': 'Medical Imaging',
-  'cad-software': 'CAD Software'
+  'cad-software': 'CAD Software',
+  'gis-mapping': 'GIS and Mapping',
+  'advertising-marketing': 'Advertising and Marketing',
+  'education-training': 'Education and Training',
+  'manufacturing-engineering': 'Manufacturing and Engineering',
+  'security-surveillance': 'Security and Surveillance',
+  'architecture-construction': 'Architecture and Construction',
+  'scientific-research': 'Scientific Research',
+  'video-production': 'Video Production',
+  'web-development': 'Web Development',
+  'game-development': 'Game Development',
+  'digital-art': 'Digital Art',
+  'photography': 'Photography',
+  'virtual-reality': 'Virtual Reality'
 };
+
+function formatCategoryName(category: string) {
+  return categoryNames[category] || category
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
 const breadcrumbs = [
   { name: 'Home', url: '/' },
-  { name: categoryNames[category], url: `/${category}` }
+  { name: formatCategoryName(category), url: `/${category}` }
 ];
 ---
 
-<Layout title={categoryNames[category]}>
+<Layout title={formatCategoryName(category)}>
   <BaseHead 
-    title={`${categoryNames[category]} - Image Format Converter`}
-    description={`Browse all ${categoryNames[category].toLowerCase()} for image format conversion`}
+    title={`${formatCategoryName(category)} - Image Format Converter`}
+    description={`Browse all ${formatCategoryName(category).toLowerCase()} image format converters`}
   />
   <main>
     <Breadcrumbs paths={breadcrumbs.slice(1)} />
     
     <article class="content">
-      <h1>{categoryNames[category]}</h1>
+      <h1>{formatCategoryName(category)}</h1>
       
       <div class="category-grid">
         {pages.map(page => (
-          <a href={`/${category}/${page.slug}`} class="category-card">
-            <h2>{page.data.title}</h2>
+          <a href={`/${category}/${page.slug}`} class="converter-card">
+            <h3>{page.data.title}</h3>
             <p>{page.data.description}</p>
           </a>
         ))}
@@ -68,29 +95,29 @@ const breadcrumbs = [
     font-size: 20px;
     line-height: 1.6;
   }
-
+  
   .content {
     margin-top: 2rem;
   }
-
+  
   h1 {
     font-size: 4rem;
     font-weight: 700;
     line-height: 1;
     text-align: center;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
     color: white;
   }
-
+  
   .category-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    margin: 2rem auto;
     max-width: 900px;
+    margin: 0 auto;
   }
   
-  .category-card {
+  .converter-card {
     background: linear-gradient(rgba(var(--accent-dark), 66%), rgba(var(--accent-dark), 33%));
     border: 1px solid rgba(var(--accent-light), 25%);
     border-radius: 8px;
@@ -100,30 +127,28 @@ const breadcrumbs = [
     transition: all 0.3s ease;
   }
   
-  .category-card:hover {
+  .converter-card:hover {
     transform: translateY(-2px);
     border-color: rgb(var(--accent-light));
   }
   
-  .category-card h2 {
+  .converter-card h3 {
     color: rgb(var(--accent-light));
     margin: 0 0 1rem 0;
     font-size: 1.5rem;
   }
   
-  .category-card p {
+  .converter-card p {
     margin: 0;
     opacity: 0.8;
-    color: white;
     line-height: 1.4;
   }
 
   @media (max-width: 768px) {
     .category-grid {
       grid-template-columns: 1fr;
-      max-width: 500px;
     }
-
+    
     h1 {
       font-size: 3rem;
     }

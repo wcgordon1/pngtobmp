@@ -3,7 +3,7 @@ title: 'PNG to BMP Converter for CAD Software'
 description: 'Convert PNG files to BMP format for legacy CAD systems and industrial design software. Optimized for technical drawings and engineering workflows.'
 category: 'cad-software'
 pubDate: 2024-01-01
-tags: ['png-to-bmp', 'cad', 'engineering', 'technical-drawing']
+tags: ['png-to-bmp', 'cad-software', 'conversion']
 ---
 
 # PNG to BMP Converter for CAD Software

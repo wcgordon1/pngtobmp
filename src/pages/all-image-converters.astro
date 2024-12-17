@@ -16,6 +16,13 @@ const pagesByCategory = pages.reduce((acc, page) => {
   return acc;
 }, {});
 
+function formatCategoryName(category) {
+  return category
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 const categoryNames = {
   'image-converters': 'Image Converters',
   'documentation': 'Documentation',
@@ -23,7 +30,30 @@ const categoryNames = {
   'printing': 'Printing',
   'retro-gaming': 'Retro Gaming',
   'medical-imaging': 'Medical Imaging',
-  'cad-software': 'CAD Software'
+  'cad-software': 'CAD Software',
+  'gis-mapping': 'GIS and Mapping',
+  'advertising-marketing': 'Advertising and Marketing',
+  'education-training': 'Education and Training',
+  'manufacturing-engineering': 'Manufacturing and Engineering',
+  'security-surveillance': 'Security and Surveillance',
+  'architecture-construction': 'Architecture and Construction',
+  'scientific-research': 'Scientific Research',
+  'video-production': 'Video Production',
+  'web-development': 'Web Development',
+  'game-development': 'Game Development',
+  'digital-art': 'Digital Art',
+  'photography': 'Photography',
+  'virtual-reality': 'Virtual Reality',
+  'drone-imaging': 'Drone Imaging',
+  'animation-graphics': 'Animation and Graphics',
+  'data-visualization': 'Data Visualization',
+  'fashion-design': 'Fashion Design',
+  'interior-design': 'Interior Design',
+  'product-photography': 'Product Photography',
+  'real-estate': 'Real Estate',
+  'social-media': 'Social Media',
+  'sports-analysis': 'Sports Analysis',
+  'vehicle-design': 'Vehicle Design'
 };
 
 const breadcrumbs = [
@@ -51,7 +81,7 @@ const sortedCategories = Object.entries(pagesByCategory).sort(([a], [b]) => {
       
       {sortedCategories.map(([category, categoryPages]) => (
         <div class="category-section">
-          <h2>{categoryNames[category] || category}</h2>
+          <h2>{categoryNames[category] || formatCategoryName(category)}</h2>
           <div class="category-grid">
             {categoryPages.map(page => (
               <a href={`/${category}/${page.slug}`} class="converter-card">

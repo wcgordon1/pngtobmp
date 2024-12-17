@@ -10,32 +10,62 @@ import BmpToPngConverter from '../components/BmpToPngConverter.astro';
 export async function getStaticPaths() {
   const pages = await getCollection('converters');
   
-  return pages.map((page) => {
-    const category = page.data.category;
-    
-    return {
-      params: {
-        slug: `${category}/${page.slug}`
-      },
-      props: { page },
-    };
-  });
+  return pages.map((page) => ({
+    params: {
+      slug: `${page.data.category}/${page.slug}`
+    },
+    props: { page }
+  }));
 }
 
 const { page } = Astro.props;
 const { Content } = await page.render();
 
-const categoryNames = {
-  'image-converters': 'Image Converters',
-  'documentation': 'Documentation',
-  'embedded-systems': 'Embedded Systems',
-  'printing': 'Printing',
-  'retro-gaming': 'Retro Gaming',
-  'medical-imaging': 'Medical Imaging',
-  'cad-software': 'CAD Software'
-};
+console.log('\n[...slug].astro - Page Data:', {
+  category: page.data.category,
+  title: page.data.title,
+  slug: page.slug
+});
 
-const category = page.data.category;
+function formatCategoryName(name: string) {
+  if (!name) return '';
+  
+  // Special cases for acronyms
+  const specialCases = {
+    'gis': 'GIS',
+    'cad': 'CAD',
+    'vr': 'VR',
+    'ui': 'UI',
+    'hmi': 'HMI',
+    'iot': 'IoT'
+  };
+
+  return name
+    .split('-')
+    .map(word => {
+      const lowerWord = word.toLowerCase();
+      // Check for special cases first
+      if (specialCases[lowerWord]) {
+        return specialCases[lowerWord];
+      }
+      // Normal case: capitalize first letter
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
+console.log('\n[...slug].astro - Formatted Category:', formatCategoryName(page.data.category));
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { 
+    name: page.data.category,
+    url: `/${page.data.category}` 
+  },
+  { name: page.data.title, url: `/${page.data.category}/${page.slug}` }
+];
+
+console.log('\n[...slug].astro - Breadcrumbs:', breadcrumbs);
 
 // Determine which converter to show based on the page tags
 const getConverterComponent = (tags) => {
@@ -75,12 +105,6 @@ const getFaqs = (tags) => {
 };
 
 const faqs = getFaqs(page.data.tags);
-
-const breadcrumbs = [
-  { name: 'Home', url: '/' },
-  { name: categoryNames[category], url: `/${category}` },
-  { name: page.data.title, url: `/${category}/${page.slug}` }
-];
 ---
 
 <Layout title={page.data.title}>

@@ -50,15 +50,15 @@ async function validateAndFixFrontmatter(content, category, useCase, converterTy
   const frontmatterRegex = /^---\n([\s\S]*?)\n---/;
   const match = content.match(frontmatterRegex);
   
-  const title = `${converterType.title} ${useCase.displayCategory} ${useCase.title}`;
-  const description = `Professional ${converterType.title} ${useCase.displayCategory} ${useCase.title}. Optimized for ${useCase.displayCategory} ${useCase.title.toLowerCase()} workflows.`;
+  const title = `${converterType.title} ${useCase.displayCategory}`;
+  const description = `Professional ${converterType.title} ${useCase.displayCategory}. Optimized for ${useCase.displayCategory.toLowerCase()} workflows.`;
   
   const frontmatter = `---
 title: '${title}'
 description: '${description}'
 category: '${category}'
 pubDate: ${new Date().toISOString().split('T')[0]}
-tags: ['${converterType.tag}', '${category}', '${useCase.name}', 'conversion']
+tags: ['${converterType.tag}', '${category}', 'conversion']
 ---
 
 ${match ? content.replace(frontmatterRegex, '') : content}`;
