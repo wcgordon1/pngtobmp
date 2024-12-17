@@ -28,7 +28,10 @@ const sortedCategories = Object.entries(pagesByCategory)
 <footer class="site-footer">
   <div class="footer-main">
     <div class="primary-links">
-      <h3>PNG TO BMP</h3>
+      <h3>
+        <img src="/logo.png" alt="PNG to BMP Logo" class="footer-logo" />
+        PNG to BMP
+      </h3>
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/all-image-converters">All Image Converters</a></li>
@@ -76,6 +79,9 @@ const sortedCategories = Object.entries(pagesByCategory)
     color: rgb(var(--accent-light));
     margin-bottom: 1rem;
     font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .primary-links ul {
@@ -160,5 +166,10 @@ const sortedCategories = Object.entries(pagesByCategory)
     .footer-categories {
       grid-template-columns: 1fr;
     }
+  }
+
+  .footer-logo {
+    height: 24px;
+    width: auto;
   }
 </style>
