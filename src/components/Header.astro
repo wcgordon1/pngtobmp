@@ -2,9 +2,10 @@
 ---
 <header class="site-header">
   <div class="header-content">
-    <div class="logo">
-      <a href="/">PNG TO BMP</a>
-    </div>
+    <a href="/" class="logo">
+      <img src="/logo.png" alt="PNG to BMP Converter" />
+      <span>PNG to BMP</span>
+    </a>
     <nav class="main-nav">
       {/* We'll add navigation items here later */}
     </nav>
@@ -14,7 +15,7 @@
 <style>
   .site-header {
     background: #1a1a1a;
-    padding: 1rem 2rem;
+    padding: 1.5rem 2rem;
     border-bottom: 1px solid #333;
   }
 
@@ -26,7 +27,10 @@
     align-items: center;
   }
 
-  .logo a {
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     color: rgb(var(--accent-light));
     text-decoration: none;
     font-size: 1.5rem;
@@ -34,7 +38,16 @@
     transition: color 0.3s ease;
   }
 
-  .logo a:hover {
+  .logo:hover {
     color: white;
+  }
+
+  .logo img {
+    height: 48px;
+    width: auto;
+  }
+
+  .logo span {
+    margin-left: 0.5rem;
   }
 </style> 

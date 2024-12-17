@@ -11,41 +11,26 @@ const openai = new OpenAI({
 
 // Define specific use cases for each category
 const categoryUseCases = {
-  'animation-graphics': [
-    { name: 'animated-sprites', title: 'Animated Sprites', displayCategory: 'Animation and Motion Graphics' },
-    { name: 'storyboards', title: 'Storyboards', displayCategory: 'Animation and Motion Graphics' },
-    { name: 'frame-by-frame', title: 'Frame-by-Frame Graphics', displayCategory: 'Animation and Motion Graphics' }
+  'gis-mapping': [
+    { name: 'topographic-maps', title: 'Topographic Maps', displayCategory: 'GIS and Mapping' },
+    { name: 'terrain-data', title: 'Terrain Data', displayCategory: 'GIS and Mapping' },
+    { name: 'geological-surveys', title: 'Geological Surveys', displayCategory: 'GIS and Mapping' }
   ],
-  'vr-design': [
-    { name: 'vr-textures', title: 'VR Textures', displayCategory: 'Virtual Reality Design' },
-    { name: 'object-overlays', title: 'Object Overlays', displayCategory: 'Virtual Reality Design' },
-    { name: 'interactive-ui', title: 'Interactive UI', displayCategory: 'Virtual Reality Design' }
+  'advertising-marketing': [
+    { name: 'billboards', title: 'Billboards', displayCategory: 'Advertising and Marketing' },
+    { name: 'brochures', title: 'Brochures', displayCategory: 'Advertising and Marketing' },
+    { name: 'digital-ads', title: 'Digital Ads', displayCategory: 'Advertising and Marketing' }
   ],
-  'drone-imaging': [
-    { name: 'aerial-photos', title: 'Aerial Photos', displayCategory: 'Drone Imaging' },
-    { name: 'mapping-overlays', title: 'Mapping Overlays', displayCategory: 'Drone Imaging' },
-    { name: 'surveying-images', title: 'Surveying Images', displayCategory: 'Drone Imaging' }
+  'education-training': [
+    { name: 'classroom-materials', title: 'Classroom Materials', displayCategory: 'Education and Training' },
+    { name: 'training-modules', title: 'Training Modules', displayCategory: 'Education and Training' },
+    { name: 'interactive-lessons', title: 'Interactive Lessons', displayCategory: 'Education and Training' }
   ],
-  'fashion-textile': [
-    { name: 'fabric-patterns', title: 'Fabric Patterns', displayCategory: 'Fashion and Textile Design' },
-    { name: 'embroidery-designs', title: 'Embroidery Designs', displayCategory: 'Fashion and Textile Design' },
-    { name: 'clothing-templates', title: 'Clothing Templates', displayCategory: 'Fashion and Textile Design' }
-  ],
-  'security-surveillance': [
-    { name: 'camera-feeds', title: 'Camera Feeds', displayCategory: 'Security and Surveillance' },
-    { name: 'facial-recognition', title: 'Facial Recognition', displayCategory: 'Security and Surveillance' },
-    { name: 'motion-detection-images', title: 'Motion Detection Images', displayCategory: 'Security and Surveillance' }
-  ],
-  'scientific-research': [
-    { name: 'microscopy-images', title: 'Microscopy Images', displayCategory: 'Scientific Research' },
-    { name: 'data-visualizations', title: 'Data Visualizations', displayCategory: 'Scientific Research' },
-    { name: 'satellite-images', title: 'Satellite Images', displayCategory: 'Scientific Research' }
-  ],
-  'automotive-design': [
-    { name: 'car-blueprints', title: 'Car Blueprints', displayCategory: 'Automotive Design' },
-    { name: 'vehicle-manuals', title: 'Vehicle Manuals', displayCategory: 'Automotive Design' },
-    { name: 'engine-diagrams', title: 'Engine Diagrams', displayCategory: 'Automotive Design' }
-  ],
+  'manufacturing-engineering': [
+    { name: 'product-blueprints', title: 'Product Blueprints', displayCategory: 'Manufacturing and Engineering' },
+    { name: 'technical-diagrams', title: 'Technical Diagrams', displayCategory: 'Manufacturing and Engineering' },
+    { name: 'assembly-guides', title: 'Assembly Guides', displayCategory: 'Manufacturing and Engineering' }
+  ]
 };
 
 const converterTypes = [
