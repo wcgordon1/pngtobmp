@@ -1,7 +1,7 @@
 ---
 pubDate: 2024-11-30
 modDate: "2024-12-01T00:00:00Z"
-author: Will Gordon
+author: Pingy McBimp
 title: The Best PNG to BMP Converter Options
 description: "Learn how to convert PNG files to BMP format efficiently. Perfect for legacy systems and specialized software requirements."
 avatar: { url: "/pingy.webp", alt: "Pingy Author" }

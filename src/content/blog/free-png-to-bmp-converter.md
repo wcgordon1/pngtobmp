@@ -1,7 +1,7 @@
 ---
 pubDate: 2024-11-16
 modDate: "2024-11-17T00:00:00Z"
-author: Will Gordon
+author: Pingy McBimp
 title: Free PNG to BMP Converter Tools Revealed
 description: "Discover the best free PNG to BMP converter tools. Preserve quality and boost versatility with our top picks!"
 avatar: { url: "/pingy.webp", alt: "Pingy Author" }

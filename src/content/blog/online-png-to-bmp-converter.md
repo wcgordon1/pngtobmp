@@ -1,7 +1,7 @@
 ---
-pubDate: 2024-11-14
-modDate: "2024-11-20T00:00:00Z"
-author: Will Gordon
+pubDate: 2024-12-14
+modDate: "2024-12-17T00:00:00Z"
+author: Pingy McBimp
 title: Online PNG to BMP Converter Tool
 description: "Convert PNG to BMP files online with our free converter. Fast, secure, and no registration required."
 avatar: { url: "/pingy.webp", alt: "Pingy Author" }
