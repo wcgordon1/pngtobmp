@@ -11,26 +11,32 @@ const openai = new OpenAI({
 
 // Define specific use cases for each category
 const categoryUseCases = {
-  'gis-mapping': [
-    { name: 'topographic-maps', title: 'Topographic Maps', displayCategory: 'GIS and Mapping' },
-    { name: 'terrain-data', title: 'Terrain Data', displayCategory: 'GIS and Mapping' },
-    { name: 'geological-surveys', title: 'Geological Surveys', displayCategory: 'GIS and Mapping' }
+  'robotics-automation': [
+    { name: 'sensor-outputs', title: 'Sensor Outputs', displayCategory: 'Robotics and Automation' },
+    { name: 'robot-navigation-maps', title: 'Robot Navigation Maps', displayCategory: 'Robotics and Automation' },
+    { name: 'control-panel-graphics', title: 'Control Panel Graphics', displayCategory: 'Robotics and Automation' }
   ],
-  'advertising-marketing': [
-    { name: 'billboards', title: 'Billboards', displayCategory: 'Advertising and Marketing' },
-    { name: 'brochures', title: 'Brochures', displayCategory: 'Advertising and Marketing' },
-    { name: 'digital-ads', title: 'Digital Ads', displayCategory: 'Advertising and Marketing' }
+  'legal-compliance': [
+    { name: 'court-diagrams', title: 'Court Diagrams', displayCategory: 'Legal and Compliance' },
+    { name: 'evidence-photos', title: 'Evidence Photos', displayCategory: 'Legal and Compliance' },
+    { name: 'document-annotations', title: 'Document Annotations', displayCategory: 'Legal and Compliance' }
   ],
-  'education-training': [
-    { name: 'classroom-materials', title: 'Classroom Materials', displayCategory: 'Education and Training' },
-    { name: 'training-modules', title: 'Training Modules', displayCategory: 'Education and Training' },
-    { name: 'interactive-lessons', title: 'Interactive Lessons', displayCategory: 'Education and Training' }
+  'environmental-monitoring': [
+    { name: 'climate-maps', title: 'Climate Maps', displayCategory: 'Environmental Monitoring' },
+    { name: 'pollution-analysis', title: 'Pollution Analysis', displayCategory: 'Environmental Monitoring' },
+    { name: 'wildlife-tracking', title: 'Wildlife Tracking', displayCategory: 'Environmental Monitoring' }
   ],
-  'manufacturing-engineering': [
-    { name: 'product-blueprints', title: 'Product Blueprints', displayCategory: 'Manufacturing and Engineering' },
-    { name: 'technical-diagrams', title: 'Technical Diagrams', displayCategory: 'Manufacturing and Engineering' },
-    { name: 'assembly-guides', title: 'Assembly Guides', displayCategory: 'Manufacturing and Engineering' }
+  'telecommunications': [
+    { name: 'network-diagrams', title: 'Network Diagrams', displayCategory: 'Telecommunications' },
+    { name: 'signal-maps', title: 'Signal Maps', displayCategory: 'Telecommunications' },
+    { name: 'legacy-system-graphics', title: 'Legacy System Graphics', displayCategory: 'Telecommunications' }
+  ],
+  'medical-equipment-interfaces': [
+    { name: 'ultrasound-screens', title: 'Ultrasound Screens', displayCategory: 'Medical Equipment Interfaces' },
+    { name: 'mri-displays', title: 'MRI Displays', displayCategory: 'Medical Equipment Interfaces' },
+    { name: 'patient-monitor-graphics', title: 'Patient Monitor Graphics', displayCategory: 'Medical Equipment Interfaces' }
   ]
+
 };
 
 const converterTypes = [
@@ -50,8 +56,8 @@ async function validateAndFixFrontmatter(content, category, useCase, converterTy
   const frontmatterRegex = /^---\n([\s\S]*?)\n---/;
   const match = content.match(frontmatterRegex);
   
-  const title = `${converterType.title} ${useCase.displayCategory}`;
-  const description = `Professional ${converterType.title} ${useCase.displayCategory}. Optimized for ${useCase.displayCategory.toLowerCase()} workflows.`;
+  const title = `${converterType.title} ${useCase.displayCategory} ${useCase.title}`;
+  const description = `Professional ${converterType.title} ${useCase.displayCategory} ${useCase.title}. Optimized for ${useCase.displayCategory} ${useCase.title.toLowerCase()} workflows.`;
   
   const frontmatter = `---
 title: '${title}'
