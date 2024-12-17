@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pngtobmp.com/sitemap-0.xml 
