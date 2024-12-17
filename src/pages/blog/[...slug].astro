@@ -1,0 +1,242 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BaseHead from '../../components/BaseHead.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// Format dates for structured data
+const publishDate = new Date(post.data.pubDate).toISOString();
+const modifyDate = new Date(post.data.modDate).toISOString();
+
+// Get word count from content
+const wordCount = post.body.split(/\s+/g).length;
+---
+
+<Layout title={post.data.title}>
+  <BaseHead 
+    title={post.data.title}
+    description={post.data.description}
+    image={post.data.image.url}
+  />
+
+  <!-- Blog Post Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.data.title,
+    "description": post.data.description,
+    "image": post.data.image.url,
+    "datePublished": publishDate,
+    "dateModified": modifyDate,
+    "author": {
+      "@type": "Person",
+      "name": post.data.author,
+      "image": post.data.avatar.url,
+      "url": "https://pngtobmp.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "PNG to BMP Converter",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": new URL(Astro.url.pathname, Astro.site).toString()
+    },
+    "keywords": post.data.tags.join(", "),
+    "wordCount": post.data.words
+  })} />
+
+  <main>
+    <article class="blog-post">
+      <header>
+        <h1>{post.data.title}</h1>
+        <div class="meta">
+          <div class="author">
+            <img 
+              src={post.data.avatar.url} 
+              alt={post.data.avatar.alt}
+              class="avatar"
+            />
+            <span>{post.data.author}</span>
+          </div>
+          <time datetime={publishDate}>
+            {new Date(post.data.pubDate).toLocaleDateString()}
+          </time>
+        </div>
+        <img 
+          src={post.data.image.url} 
+          alt={post.data.image.alt}
+          class="featured-image"
+        />
+      </header>
+      <div class="meta-info">
+        <div class="tags">
+          {post.data.tags.map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+      <div class="content">
+        <Content />
+      </div>
+
+    </article>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 800px;
+    max-width: calc(100% - 2rem);
+    color: white;
+  }
+
+  .blog-post {
+    margin-top: 2rem;
+  }
+
+  header {
+    margin-bottom: 2rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    color: #888;
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+
+  .featured-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  /* Style markdown content */
+  .content :global(a) {
+    color: rgb(var(--accent-light));
+    text-decoration: none;
+    border-bottom: 1px solid rgba(var(--accent-light), 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .content :global(a:hover) {
+    border-bottom-color: rgb(var(--accent-light));
+    background: rgba(var(--accent-light), 0.1);
+  }
+
+  .content :global(h2) {
+    font-size: 1.8rem;
+    margin: 2rem 0 1rem;
+    color: rgb(var(--accent-light));
+  }
+
+  .content :global(h3) {
+    font-size: 1.4rem;
+    margin: 1.5rem 0 1rem;
+    color: rgb(var(--accent-light));
+  }
+
+  .content :global(p) {
+    margin-bottom: 1.5rem;
+    color: white;
+  }
+
+  .content :global(ul), .content :global(ol) {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+    color: white;
+  }
+
+  .content :global(li) {
+    margin: 0.5rem 0;
+  }
+
+  .content :global(code) {
+    background: rgba(var(--accent-light), 0.1);
+    color: rgb(var(--accent-light));
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
+  .content :global(pre code) {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .tag {
+    background: rgba(var(--accent-light), 0.1);
+    color: rgb(var(--accent-light));
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+
+  .meta-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .word-count {
+    color: #888;
+    font-size: 0.9rem;
+  }
+</style> 

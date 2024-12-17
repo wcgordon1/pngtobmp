@@ -1,0 +1,201 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BaseHead from '../../components/BaseHead.astro';
+
+const posts = await getCollection('blog');
+
+// Add word count to posts
+const postsWithWordCount = posts.map(post => ({
+  ...post,
+  wordCount: post.body.split(/\s+/g).length
+}));
+
+// Sort with word count included
+const sortedPosts = [...postsWithWordCount].sort((a, b) => {
+  const dateA = a.data.pubDate ? new Date(a.data.pubDate).getTime() : 0;
+  const dateB = b.data.pubDate ? new Date(b.data.pubDate).getTime() : 0;
+  return dateB - dateA;
+});
+
+const title = "Blog - PNG to BMP Converter";
+const description = "Latest articles about image conversion, file formats, and technical guides.";
+---
+
+<Layout title={title}>
+  <BaseHead 
+    title={title}
+    description={description}
+  />
+  <main>
+    <h1>PNG to BMP Converter Blog</h1>
+    <div class="blog-grid">
+      {sortedPosts.map(post => (
+        <article class="blog-card">
+          <a href={`/blog/${post.slug}`} class="card-link">
+            {post.data.image?.url && (
+              <img 
+                src={post.data.image.url} 
+                alt={post.data.image.alt || ''}
+                class="card-image"
+              />
+            )}
+            <div class="card-content">
+              <h2>{post.data.title}</h2>
+              <div class="word-count">
+                {new Intl.NumberFormat().format(post.data.words)} words
+              </div>
+              <p class="description">{post.data.description}</p>
+              <div class="meta">
+                <div class="author">
+                  {post.data.avatar?.url && (
+                    <img 
+                      src={post.data.avatar.url} 
+                      alt={post.data.avatar.alt || ''}
+                      class="avatar"
+                    />
+                  )}
+                  <span>{post.data.author}</span>
+                </div>
+                <div class="post-meta">
+                  {post.data.pubDate && (
+                    <time datetime={new Date(post.data.pubDate).toISOString()}>
+                      {new Date(post.data.pubDate).toLocaleDateString()}
+                    </time>
+                  )}
+                </div>
+              </div>
+              {post.data.tags && (
+                <div class="tags">
+                  {post.data.tags.map(tag => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1rem;
+    width: 1200px;
+    max-width: calc(100% - 2rem);
+    color: white;
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 5rem;
+    text-align: center;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .blog-card {
+    background: rgba(var(--accent-dark), 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    color: rgb(var(--accent-light));
+    margin-bottom: 1rem;
+  }
+
+  .description {
+    color: #ccc;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #888;
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    background: rgba(var(--accent-light), 0.1);
+    color: rgb(var(--accent-light));
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #888;
+    font-size: 0.9rem;
+  }
+
+  .word-count {
+    white-space: nowrap;
+  }
+
+  .word-count {
+    color: #888;
+    font-size: 0.9rem;
+    margin: -0.5rem 0 1rem;
+  }
+</style> 

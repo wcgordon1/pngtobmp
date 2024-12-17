@@ -1,17 +1,25 @@
 import { defineCollection, z } from 'astro:content';
 
-const converters = defineCollection({
-  type: 'content',
+const blog = defineCollection({
   schema: z.object({
+    pubDate: z.date(),
+    modDate: z.string(),
+    author: z.string(),
     title: z.string(),
     description: z.string(),
-    category: z.string(),
-    pubDate: z.date(),
-    updatedDate: z.date().optional(),
+    avatar: z.object({
+      url: z.string(),
+      alt: z.string()
+    }),
+    image: z.object({
+      url: z.string(),
+      alt: z.string()
+    }),
     tags: z.array(z.string()),
-  }),
+    words: z.number()
+  })
 });
 
 export const collections = {
-  'converters': converters,
+  blog
 };

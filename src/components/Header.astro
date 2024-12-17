@@ -7,7 +7,7 @@
       <span>PNG to BMP</span>
     </a>
     <nav class="main-nav">
-      {/* We'll add navigation items here later */}
+      <a href="/blog" class="nav-link">Blog</a>
     </nav>
   </div>
 </header>
@@ -15,17 +15,17 @@
 <style>
   .site-header {
     background: #1a1a1a;
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
     border-bottom: 1px solid #333;
   }
 
   .header-content {
-    max-width: 1200px;
+    width: 1200px;
+    max-width: calc(100% - 2rem);
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
   }
 
   .logo {
@@ -50,5 +50,25 @@
 
   .logo span {
     margin-left: 0.25rem;
+  }
+
+  .nav-link {
+    color: rgb(var(--accent-light));
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+
+  .nav-link:hover {
+    color: white;
+    background: rgba(var(--accent-light), 0.1);
+  }
+
+  @media (max-width: 768px) {
+    .header-content {
+      padding: 0;
+    }
   }
 </style> 
